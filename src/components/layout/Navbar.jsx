@@ -89,7 +89,7 @@ export default function Navbar() {
         px-6 py-3 md:px-10 md:py-4
         bg-white/40 backdrop-blur-2xl border-b  border-white/20
         flex items-center justify-between
-        transition-transform duration-500
+        transition-transform duration-500 
         ${showNav ? "translate-y-0" : "-translate-y-full"}
       `}
     >
@@ -97,7 +97,7 @@ export default function Navbar() {
       <img src={logo} className="h-24 md:h-16" alt="Logo" />
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex gap-10  text-lg font-light">
+      <ul className="hidden md:flex gap-10  text-lg font-light ">
         <Link to="/home" className="hover:opacity-70">Home</Link>
         <Link to="/about" className="hover:opacity-70">About</Link>
         <Link to="/Portfolio" className="hover:opacity-70">Portfolio</Link>

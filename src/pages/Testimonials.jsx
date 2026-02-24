@@ -33,6 +33,22 @@ const CHANNEL_ID = "UCol7IKN_DWrViXizIZESHZQ";
     });
   }, []);
 
+  useEffect(() => {
+  document.title =
+    "Client Testimonials | Best Wedding Photographer in Bangalore";
+
+  const metaDescription = document.querySelector(
+    "meta[name='description']"
+  );
+
+  if (metaDescription) {
+    metaDescription.setAttribute(
+      "content",
+      "Read genuine client testimonials and reviews for 35 Frames Photography, a trusted wedding photographer in Bangalore known for candid and traditional wedding shoots."
+    );
+  }
+}, []);
+
   return (
     <div style={{ padding: "40px" }} className="mt-54 bg-[#F7F4ED]">
       {!videos.length && <p>Loading videos...</p>}

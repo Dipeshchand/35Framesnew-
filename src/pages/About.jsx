@@ -1,11 +1,29 @@
+import { useEffect } from "react";
 import boss from "../assets/images/mainboss.jpg";
 import videopeople from "../assets/images/pratapvideographer.jpg";
 import editor from "../assets/images/Vasuphotoedtiter.jpg";
 import both from "../assets/images/VEnkeyvideographer+edtiter.jpg";
 
 export default function About() {
+
+  useEffect(() => {
+    document.title =
+      "About 35 Frames Photography | Wedding Photographer in Bangalore";
+
+    const metaDescription = document.querySelector(
+      "meta[name='description']"
+    );
+
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "Learn about 35 Frames Photography, a professional wedding photography and videography studio based in Bangalore since 2004."
+      );
+    }
+  }, []);
+
   return (
-    <section className="w-full bg-[#F7F4ED] py-16 md:py-20 px-4 sm:px-6 mt-47">
+    <section className="w-full bg-[#F7F4ED] py-16 md:py-20 px-4 sm:px-6 mt-40">
       <div className="max-w-6xl mx-auto">
 
         {/* Title */}

@@ -4,11 +4,40 @@ import { Link } from "react-router-dom";
 export default function Portfolio() {
   const [albums, setAlbums] = useState([]);
 
+  // useEffect(() => {
+  //   fetch("http://localhost:5000/albums")
+  //     .then((res) => res.json())
+  //     .then(setAlbums);
+  // }, []);
+
   useEffect(() => {
-    fetch("http://localhost:5000/albums")
-      .then((res) => res.json())
-      .then(setAlbums);
-  }, []);
+  const fetchAlbums = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/albums");
+
+      if (!res.ok) {
+        console.log("Server returned:", res.status);
+        setAlbums([]);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setAlbums(data);
+      } else {
+        console.log("Response is not array:", data);
+        setAlbums([]);
+      }
+
+    } catch (error) {
+      console.log("Fetch error:", error);
+      setAlbums([]);
+    }
+  };
+
+  fetchAlbums();
+}, []);
 
   return (
     <div className="px-6 py-20 bg-[#F7F4ED]">

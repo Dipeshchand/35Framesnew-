@@ -52,6 +52,21 @@ const breakpointColumnsObj = {
 };
 
 export default function Portfolio() {
+  useEffect(() => {
+  document.title =
+    "Wedding Photography Gallery in Bangalore | 35 Frames";
+
+  const metaDescription = document.querySelector(
+    "meta[name='description']"
+  );
+
+  if (metaDescription) {
+    metaDescription.setAttribute(
+      "content",
+      "Explore our Bangalore wedding photography gallery featuring candid and traditional wedding moments."
+    );
+  }
+}, []);
   const [covers, setCovers] = useState([]);
   const [zoomImg, setZoomImg] = useState(null);
 
