@@ -43,7 +43,7 @@ export default function About() {
               <img
                 src={boss}
                 alt="Founder"
-                className="w-full h-[420px] sm:h-[380px] md:h-[430px] object-cover"
+                className="w-full h-[520px] sm:h-[380px] md:h-[650px] object-cover"
               />
             </div>
 
