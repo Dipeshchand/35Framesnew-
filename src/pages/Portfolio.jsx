@@ -13,7 +13,7 @@ export default function Portfolio() {
   useEffect(() => {
   const fetchAlbums = async () => {
     try {
-      const res = await fetch("http://localhost:5000/albums");
+      const res = await fetch(" https://three5framesnew-backend.onrender.com/albums");
 
       if (!res.ok) {
         console.log("Server returned:", res.status);

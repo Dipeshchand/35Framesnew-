@@ -9,7 +9,7 @@ export default function Login() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/auth/login", {
+    const res = await fetch(" https://three5framesnew-backend.onrender.com/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
