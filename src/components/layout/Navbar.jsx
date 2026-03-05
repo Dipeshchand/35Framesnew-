@@ -94,7 +94,10 @@ export default function Navbar() {
       `}
     >
       {/* Logo */}
-      <img src={logo} className="h-24 md:h-16" alt="Logo" />
+      {/* <img src={logo} className="h-24 md:h-16" alt="Logo" /> */}
+      <div>
+        <h1 className="text-4xl" style={{fontFamily:"Seasons"}}>Vowframe</h1>
+      </div>
 
       {/* Desktop Menu */}
       <ul className="hidden md:flex gap-10  text-lg font-light ">

@@ -93,7 +93,7 @@ export default function AlbumPage() {
       </h2>
 
       {/* Gallery */}
-      <div className="columns-2 sm:columns-3 lg:columns-4 gap-1">
+      <div className="columns-1 sm:columns-3 lg:columns-4 gap-1">
         {photos.map((photo) => (
           <div
             key={photo._id}

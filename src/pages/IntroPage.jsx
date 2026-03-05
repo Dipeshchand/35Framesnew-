@@ -50,8 +50,8 @@ export default function IntroPage() {
                 className="flex items-center justify-center bg-[#DCCDC2]"
               >
                 <div className="text-center">
-                  <h1 className="text-3xl md:text-5xl font-baskervville mb-4">
-                    35FRAMES
+                  <h1 className="text-3xl md:text-5xl font-baskervville mb-4" style={{fontFamily:"Seasons"}}>
+                    Vowframe
                   </h1>  
                   <button 
                     onClick={() => navigate("/home")}
