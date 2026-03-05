@@ -97,7 +97,7 @@ export default function AlbumPage() {
         {photos.map((photo) => (
           <div
             key={photo._id}
-            className="mb-4 overflow-hidden  group"
+            className="overflow-hidden  group"
           >
             <img
               src={photo.url}
