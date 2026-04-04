@@ -37,12 +37,12 @@ export default function CapturedMoments() {
       desc: "Cherishing the promise of forever with elegant, heartfelt frames filled with love and excitement.",
       image: cover5 
     },
-    { 
-      id: 6, 
-      name: "Pre birthday shoots", 
-      desc: "Adorable, fun, and joy-filled photos that celebrate milestones before the big birthday moment.",
-      image: cover6 
-    },
+    // { 
+    //   id: 6, 
+    //   name: "Pre birthday shoots", 
+    //   desc: "Adorable, fun, and joy-filled photos that celebrate milestones before the big birthday moment.",
+    //   image: cover6 
+    // },
   ];
 
   return (
