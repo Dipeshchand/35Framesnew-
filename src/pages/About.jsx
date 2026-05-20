@@ -28,7 +28,7 @@ export default function About() {
 
         {/* Title */}
         <h2 className="text-center text-3xl md:text-4xl font-serif font-bold text-gray-800">
-          About 35 Frames Photography
+          About Vowframe Photography
         </h2>
         <p className="text-center text-gray-600 mt-2 text-base md:text-lg">
           Capturing emotions. Creating timeless memories.
@@ -51,14 +51,14 @@ export default function About() {
               Founder — Somu Sekhar
             </h3>
             <p className="text-gray-600 italic">
-              Founder of 35 Frames Photography
+              Founder of Vowframe Photography
             </p>
           </div>
 
           {/* CONTENT */}
           <div>
             <p className="text-gray-700 text-base md:text-lg leading-relaxed">
-              Hello there, we are <span className="font-semibold">35 Frames Photography</span>, 
+              Hello there, we are <span className="font-semibold">Vowframe Photography</span>, 
               a luxury photography brand dedicated to preserving life’s most meaningful 
               moments with elegance, artistry, and emotion.
             </p>
