@@ -54,7 +54,7 @@ export default function AlbumPage() {
 
   useEffect(() => {
     async function loadData() {
-      const albums = await fetch(" https://three5framesnew-backend.onrender.com/albums").then((r) =>
+      const albums = await fetch("https://three5framesnew-backend.onrender.com/albums").then((r) =>
         r.json()
       );
 
