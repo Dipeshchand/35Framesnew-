@@ -21,6 +21,11 @@ if (!fs.existsSync("uploads")) {
 app.use(cors());
 app.use(express.json());
 
+app.get("/health",(req,res)=>{
+  res.send("Server is running");
+});
+
+
 app.use("/uploads",express.static("uploads"));
 app.use("/albums", albumRoutes);
 app.use("/upload", uploadRoutes);
