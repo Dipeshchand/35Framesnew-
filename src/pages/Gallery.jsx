@@ -1,108 +1,176 @@
-import React, { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
-import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import API from "../../api";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import "./Portfolio.css";
 
-// IMAGES
-import img1 from "../assets/images/reff1-min.JPG";
-import img2 from "../assets/images/reff2-min.JPG";
-import img3 from "../assets/images/reff3-min.JPG";
-import img4 from "../assets/images/reff4-min.JPG";
-import img5 from "../assets/images/reff5-min.JPG";
-import img6 from "../assets/images/reff6-min.JPG";
-import img7 from "../assets/images/reff7-min.JPG";
-import img8 from "../assets/images/reff8-min.JPG";
-import img9 from "../assets/images/reff9-min.JPG";
-import img10 from "../assets/images/reff10-min.JPG";
-import img11 from "../assets/images/reff11-min.JPG";
-import img12 from "../assets/images/reff12-min.JPG";
-import img13 from "../assets/images/reff13-min.JPG";
-import img14 from "../assets/images/reff14-min.JPG";
-import img15 from "../assets/images/reff15-min.JPG";
-import img16 from "../assets/images/reff16-min.JPG";
-import img17 from "../assets/images/reff17-min.JPG";
-import img18 from "../assets/images/reff18-min.JPG";
-import img19 from "../assets/images/reff19-min.JPG";
-import img20 from "../assets/images/reff20-min.JPG";
-import img21 from "../assets/images/reff21-min.JPG";
-import img22 from "../assets/images/reff22-min.JPG";
-import img23 from "../assets/images/reff23-min.JPG";
-import img24 from "../assets/images/reff24-min.JPG";
-import img25 from "../assets/images/reff25-min.JPG";
-import img26 from "../assets/images/reff26-min.JPG";
-import img27 from "../assets/images/reff27-min.JPG";
-import img28 from "../assets/images/reff28-min.JPG";
-import img29 from "../assets/images/reff29-min.JPG";
-import img30 from "../assets/images/reff30-min.JPG";
+// Original high-resolution images are retained for zoom.
+// Vite includes their URLs, but the files are only requested
+// by the browser when a visitor opens an image.
+const originalImages = import.meta.glob(
+  "../assets/images/reff*-min.JPG",
+  {
+    eager: true,
+    query: "?url",
+    import: "default",
+  }
+);
 
-const images = [
-  img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,
-  img11,img12,img13,img14,img15,img16,img17,img18,img19,img20,
-  img21,img22,img23,img24,img25,img26,img27,img28,img29,img30
+// Original image dimensions
+const imageDimensions = [
+  [9504, 6336], // reff1
+  [8256, 5504], // reff2
+  [9504, 6336], // reff3
+  [9504, 6336], // reff4
+  [9504, 6336], // reff5
+  [6000, 3363], // reff6
+  [9504, 6336], // reff7
+  [9327, 6218], // reff8
+  [4800, 3000], // reff9
+  [7008, 4672], // reff10
+  [9504, 6336], // reff11
+  [9504, 6336], // reff12
+  [6000, 4000], // reff13
+  [6501, 4334], // reff14
+  [9504, 6336], // reff15
+  [3765, 5647], // reff16
+  [6089, 9134], // reff17
+  [5285, 8381], // reff18
+  [6934, 4623], // reff19
+  [9504, 6336], // reff20
+  [8991, 5994], // reff21
+  [7952, 5304], // reff22
+  [4425, 2950], // reff23
+  [7887, 5721], // reff24
+  [4672, 7008], // reff25
+  [9504, 6336], // reff26
+  [9504, 6336], // reff27
+  [4672, 7008], // reff28
+  [9367, 6245], // reff29
+  [6000, 4000], // reff30
 ];
+
+// Create gallery image data
+const images = imageDimensions.map(([width, height], index) => {
+  const number = index + 1;
+
+  const originalPath =
+    `../assets/images/reff${number}-min.JPG`;
+
+  return {
+    id: number,
+    width,
+    height,
+
+    mobile: `/images/intro/reff${number}-480.webp`,
+    desktop: `/images/intro/reff${number}-960.webp`,
+
+    // Original image is reserved for zoom functionality.
+    original: originalImages[originalPath],
+  };
+});
 
 const breakpointColumnsObj = {
   default: 3,
   1024: 2,
-  640: 1
+  640: 1,
 };
 
-export default function Portfolio() {
-  useEffect(() => {
-  document.title =
-    "Wedding Photography Gallery in Bangalore | 35 Frames";
-
-  const metaDescription = document.querySelector(
-    "meta[name='description']"
-  );
-
-  if (metaDescription) {
-    metaDescription.setAttribute(
-      "content",
-      "Explore our Bangalore wedding photography gallery featuring candid and traditional wedding moments."
-    );
-  }
-}, []);
-  const [covers, setCovers] = useState([]);
+export default function Gallery() {
   const [zoomImg, setZoomImg] = useState(null);
 
+  useEffect(() => {
+    document.title =
+      "Wedding Photography Gallery in Bangalore | 35 Frames";
 
-  const openZoom = (img) => setZoomImg(img);
+    const metaDescription = document.querySelector(
+      "meta[name='description']"
+    );
+
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "Explore our Bangalore wedding photography gallery featuring candid and traditional wedding moments."
+      );
+    }
+  }, []);
+
+  const openZoom = (image) => setZoomImg(image);
+
   const closeZoom = () => setZoomImg(null);
 
   return (
-    <div className="w-full px-1 sm:px-4 mt-30 bg-[#F6F3EC]">
+    <main className="w-full px-1 sm:px-4 mt-30 bg-[#F6F3EC]">
 
       {/* MASONRY GRID */}
       <Masonry
         breakpointCols={breakpointColumnsObj}
-        className="flex "
+        className="flex"
         columnClassName=""
       >
-        {images.map((img, index) => (
+        {images.map((image, index) => (
           <img
-            key={index}
-            src={img}
-            onClick={() => openZoom(img)}
-            className="w-full object-cover  cursor-zoom-in hover:opacity-95 transition"
+            key={image.id}
+            src={image.desktop}
+            srcSet={`
+              ${image.mobile} 480w,
+              ${image.desktop} 960w
+            `}
+            sizes="
+              (min-width: 1024px) 33vw,
+              (min-width: 640px) 50vw,
+              100vw
+            "
+            width={image.width}
+            height={image.height}
+            alt={`Wedding photography gallery image ${image.id}`}
+            loading={index < 3 ? "eager" : "lazy"}
+            fetchPriority={index === 0 ? "high" : "auto"}
+            decoding="async"
+            onClick={() => openZoom(image)}
+            className="
+              w-full
+              object-cover
+              cursor-zoom-in
+              hover:opacity-95
+              transition
+            "
           />
         ))}
       </Masonry>
 
-      {/* ZOOM */}
+      {/* ZOOM VIEW */}
       {zoomImg && (
-        <div className="fixed inset-0 bg-black/90 z-[999] flex items-center justify-center p-4" onClick={closeZoom}>
+        <div
+          className="
+            fixed inset-0
+            bg-black/90
+            z-[999]
+            flex items-center justify-center
+            p-4
+          "
+          role="dialog"
+          aria-modal="true"
+          aria-label="Expanded gallery photograph"
+          onClick={closeZoom}
+        >
           <img
-            src={zoomImg}
-            className="max-w-full max-h-full object-contain rounded-lg"
+            src={
+              zoomImg.original || zoomImg.desktop
+            }
+            width={zoomImg.width}
+            height={zoomImg.height}
+            alt={`Wedding photography gallery image ${zoomImg.id}`}
+            decoding="async"
             onClick={(e) => e.stopPropagation()}
+            className="
+              max-w-full
+              max-h-full
+              object-contain
+              rounded-lg
+            "
           />
         </div>
       )}
-    </div>
+    </main>
   );
 }

@@ -1,79 +1,149 @@
-import React, { useEffect, useState, useRef } from "react";
 
-export default function Portfolio() {
+import { useEffect, useState } from "react";
+
+const API_ENDPOINT = "/api/testimonials/videos";
+
+export default function Testimonials() {
   const [videos, setVideos] = useState([]);
-const API_KEY = "AIzaSyArqi5kGwPw1NSr3N0gk9bqjonII_Po2FI"; 
-const CHANNEL_ID = "UCol7IKN_DWrViXizIZESHZQ";
-  const observerRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [activeVideo, setActiveVideo] = useState(null);
 
   useEffect(() => {
+    document.title =
+      "Client Testimonials | Best Wedding Photographer in Bangalore";
+
+    const metaDescription = document.querySelector(
+      "meta[name='description']"
+    );
+
+    if (metaDescription) {
+      metaDescription.setAttribute(
+        "content",
+        "Read genuine client testimonials and reviews for 35 Frames Photography, a trusted wedding photographer in Bangalore known for candid and traditional wedding shoots."
+      );
+    }
+
+    const controller = new AbortController();
+
     const fetchVideos = async () => {
       try {
-        const res = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=10`
-        );
-        const data = await res.json();
-        setVideos(data.items);
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(API_ENDPOINT, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("Unable to load testimonials.");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.videos)) {
+          throw new Error("Invalid video response.");
+        }
+
+        setVideos(data.videos);
       } catch (err) {
-        console.log("Error fetching videos", err);
+        if (err.name !== "AbortError") {
+          console.error("Testimonials error:", err);
+          setError("Unable to load videos. Please try again later.");
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchVideos();
+
+    return () => controller.abort();
   }, []);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.src = entry.target.dataset.src;
-          observerRef.current.unobserve(entry.target);
-        }
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-  document.title =
-    "Client Testimonials | Best Wedding Photographer in Bangalore";
-
-  const metaDescription = document.querySelector(
-    "meta[name='description']"
-  );
-
-  if (metaDescription) {
-    metaDescription.setAttribute(
-      "content",
-      "Read genuine client testimonials and reviews for 35 Frames Photography, a trusted wedding photographer in Bangalore known for candid and traditional wedding shoots."
-    );
-  }
-}, []);
 
   return (
-    <div style={{ padding: "40px" }} className="mt-54 bg-[#F7F4ED]">
-      {!videos.length && <p>Loading videos...</p>}
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: "20px",
-        }}
+    <main
+      className="mt-54 bg-[#F7F4ED]"
+      style={{ padding: "40px" }}
+    >
+      <section
+        aria-label="Client video testimonials"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5"
       >
-        {videos.map((video, i) =>
-          video.id.videoId ? (
-            <iframe
-              key={i}
-              width="100%"
-              height="250"
-              style={{ borderRadius: "10px", border: "none" }}
-              data-src={`https://www.youtube.com/embed/${video.id.videoId}`}
-              ref={el => el && observerRef.current.observe(el)}
-              allowFullScreen
-            ></iframe>
-          ) : null
+
+        {/* LOADING PLACEHOLDERS */}
+        {loading &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <div
+              key={`skeleton-${index}`}
+              className="w-full h-[250px] rounded-[10px] bg-gray-200 animate-pulse"
+              aria-hidden="true"
+            />
+          ))}
+
+        {/* ERROR MESSAGE */}
+        {!loading && error && (
+          <p className="col-span-full text-center text-red-600 py-10">
+            {error}
+          </p>
         )}
-      </div>
-    </div>
+
+        {/* NO VIDEOS */}
+        {!loading && !error && videos.length === 0 && (
+          <p className="col-span-full text-center py-10">
+            No testimonials available right now.
+          </p>
+        )}
+
+        {/* VIDEO CARDS */}
+        {!loading &&
+          !error &&
+          videos.map((video, index) => (
+            <div
+              key={video.videoId}
+              className="w-full h-[250px] overflow-hidden rounded-[10px] bg-black"
+            >
+              {activeVideo === video.videoId ? (
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(
+                    video.videoId
+                  )}?autoplay=1`}
+                  title={video.title || `Client testimonial ${index + 1}`}
+                  className="w-full h-full border-none"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setActiveVideo(video.videoId)}
+                  className="relative w-full h-full block group"
+                  aria-label={`Play ${video.title || "client testimonial"}`}
+                >
+                  <img
+                    src={video.thumbnailUrl}
+                    alt={`${video.title || "Client testimonial"} thumbnail`}
+                    width="480"
+                    height="360"
+                    loading={index < 2 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+
+                  {/* Play button */}
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition">
+                    <span className="flex items-center justify-center bg-red-600 text-white rounded-xl w-16 h-12 text-2xl shadow-lg">
+                      ▶
+                    </span>
+                  </span>
+                </button>
+              )}
+            </div>
+          ))}
+      </section>
+    </main>
   );
 }

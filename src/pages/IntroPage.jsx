@@ -1,35 +1,21 @@
+
 import { useNavigate } from "react-router-dom";
 
-import img1 from "../assets/images/reff1-min.JPG";
-import img2 from "../assets/images/reff2-min.JPG";
-import img3 from "../assets/images/reff3-min.JPG";
-import img4 from "../assets/images/reff4-min.JPG";
-import img5 from "../assets/images/reff5-min.JPG";
-import img6 from "../assets/images/reff6-min.JPG";
-import img7 from "../assets/images/reff7-min.JPG";
-//
-import img8 from "../assets/images/reff8-min.JPG";
-import img9 from "../assets/images/reff9-min.JPG";
-import img10 from "../assets/images/reff10-min.JPG";
-import img11 from "../assets/images/reff11-min.JPG";
-import img12 from "../assets/images/reff12-min.JPG";
-import img13 from "../assets/images/reff13-min.JPG";
-import img14 from "../assets/images/reff14-min.JPG";
+// Optimized responsive WebP images
+const images = Array.from({ length: 14 }, (_, index) => {
+  const number = index + 1;
+
+  return {
+    mobile: `/images/intro/reff${number}-480.webp`,
+    desktop: `/images/intro/reff${number}-960.webp`,
+  };
+});
 
 export default function IntroPage() {
   const navigate = useNavigate();
 
-  const images = [
-    img1, img2, img3, img4, img5,
-    img6, img7, img8, img9,
-    img10, img11, img12, img13, img14
-  ];
-
-  let imageIndex = 0;
-
   return (
-    <div className="w-full h-screen ">
-        {/* overflow-hidden */}
+    <div className="w-full h-screen">
       <div
         className="
           grid
@@ -41,8 +27,9 @@ export default function IntroPage() {
           h-full
         "
       >
-        {Array.from({ length: 15 }).map((_, i) => {
-          // CENTER CELL (index 7)
+        {Array.from({ length: 15 }, (_, i) => {
+
+          // Center cell containing Vowframe branding
           if (i === 7) {
             return (
               <div
@@ -50,10 +37,14 @@ export default function IntroPage() {
                 className="flex items-center justify-center bg-[#DCCDC2]"
               >
                 <div className="text-center">
-                  <h1 className="text-3xl md:text-5xl font-baskervville mb-4" style={{fontFamily:"Seasons"}}>
+                  <h1
+                    className="text-3xl md:text-5xl font-baskervville mb-4"
+                    style={{ fontFamily: "Seasons" }}
+                  >
                     Vowframe
-                  </h1>  
-                  <button 
+                  </h1>
+
+                  <button
                     onClick={() => navigate("/home")}
                     className="px-6 py-2.5 bg-[#5A3F33] text-white rounded-full"
                   >
@@ -64,14 +55,27 @@ export default function IntroPage() {
             );
           }
 
-          const img = images[imageIndex++];
+          // Calculate image index while skipping the center cell
+          const imageIndex = i < 7 ? i : i - 1;
+          const image = images[imageIndex];
+
+          // Lighthouse identified the 14th image as the LCP element
+          const isLcpImage = imageIndex === 13;
 
           return (
             <div key={i} className="overflow-hidden">
               <img
-                src={img}
+                src={image.desktop}
+                srcSet={`
+                  ${image.mobile} 480w,
+                  ${image.desktop} 960w
+                `}
+                sizes="(min-width: 768px) 20vw, 33.333vw"
                 alt=""
-                className="w-full h-full object-cover"
+                loading="eager"
+                fetchPriority={isLcpImage ? "high" : "auto"}
+                decoding="async"
+                className="block w-full h-full object-cover"
               />
             </div>
           );
