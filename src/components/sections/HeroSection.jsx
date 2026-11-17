@@ -1,140 +1,71 @@
-// import { useEffect, useState } from "react";
-// import img1 from "../../assets/images/n1.jpg";
-// import img2 from "../../assets/images/n2.jpg";
-// import img3 from "../../assets/images/n3.jpg";
-// import img4 from "../../assets/images/n4.jpg";
-// import img5 from "../../assets/images/n5.jpg";
-
-// const images = [img1, img2, img3, img4, img5];
-
-// export default function HeroSection() {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setCurrentIndex(prev =>
-//         prev === images.length - 1 ? 0 : prev + 1
-//       );
-//     }, 3000);
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   return (
-//     <section
-//       className="
-//         relative w-full
-//         h-[100svh]           /* mobile */
-//         md:h-[80vh]          /* tablet */
-//         lg:h-[180vh]          /* desktop */
-//         bg-no-repeat bg-cover
-//         transition-all duration-700
-//       "
-//       style={{
-//         backgroundImage: `url(${images[currentIndex]})`,
-//         backgroundPosition: "center center",
-//       }}
-//     >
-//       {/* Overlay */}
-//       <div className="absolute inset-0 bg-black/30" />
-
-//       {/* Content wrapper */}
-//       <div className="relative z-10 h-full flex items-center justify-center">
-//         {/* Your hero text/buttons here */}
-//       </div>
-//     </section>
-//   );
-// }
-
-
-// import { useEffect, useState } from "react";
-// import img1 from "../../assets/images/n1.jpg";
-// import img2 from "../../assets/images/n2.jpg";
-// import img3 from "../../assets/images/n3.jpg";
-// import img4 from "../../assets/images/n4.jpg";
-// import img5 from "../../assets/images/n5.jpg";
-
-// const images = [img1, img2, img3, img4, img5];
-
-// export default function HeroSection() {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setCurrentIndex(prev =>
-//         prev === images.length - 1 ? 0 : prev + 1
-//       );
-//     }, 3000);
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   return (
-//     <section
-//       className="
-//         relative w-full
-//         pt-20                /* pushes hero below fixed navbar */
-//         h-[100svh]           /* mobile */
-//         md:h-[90vh]          /* tablet */
-//         lg:h-[100vh]         /* desktop */
-//         bg-no-repeat bg-cover
-//         transition-all duration-700
-//       "
-//       style={{
-//         backgroundImage: `url(${images[currentIndex]})`,
-//         backgroundPosition: "center center",
-//       }}
-//     >
-//       {/* Overlay */}
-//       <div className="absolute inset-0 bg-black/30" />
-//     </section>
-//   );
-// }
-
 
 import { useEffect, useState } from "react";
-import img1 from "../../assets/images/n1.jpg";
-import img2 from "../../assets/images/couple11.jpg";
-import img3 from "../../assets/images/n3.jpg";
-import img4 from "../../assets/images/n4.jpg";
-import img5 from "../../assets/images/n5.jpg";
 
-const images = [img1, img2, img3, img4, img5];
+// Optimized WebP slideshow images
+const images = ["n1", "couple11", "n3", "n4", "n5"].map(
+  (name) => ({
+    mobile: `/images/intro/${name}-480.webp`,
+    desktop: `/images/intro/${name}-960.webp`,
+  })
+);
 
 export default function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prev =>
+useEffect(() => {
+  let interval;
+
+  // Let the first hero image load before starting the slideshow
+  const initialDelay = setTimeout(() => {
+    interval = setInterval(() => {
+      setCurrentIndex((prev) =>
         prev === images.length - 1 ? 0 : prev + 1
       );
     }, 3000);
+  }, 8000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => {
+    clearTimeout(initialDelay);
+
+    if (interval) {
+      clearInterval(interval);
+    }
+  };
+}, []);
+
+  const currentImage = images[currentIndex];
 
   return (
     <section
       className="
-     
-   relative 
+        relative
         max-w-[100vw]
         w-full
         mt-24
         min-h-screen
         md:h-[90vh]
         lg:h-[80vh]
-        bg-no-repeat bg-cover
-        transition-all duration-700
-
+        overflow-hidden
       "
-      style={{
-        backgroundImage: `url(${images[currentIndex]})`,
-        backgroundPosition: "center center",
-      }}
     >
-      <div className="absolute inset-0 bg-black/30" />
+      <img
+        src={currentImage.desktop}
+        srcSet={`
+          ${currentImage.mobile} 480w,
+          ${currentImage.desktop} 960w
+        `}
+        sizes="100vw"
+        alt=""
+        loading="eager"
+        fetchPriority={currentIndex === 0 ? "high" : "auto"}
+        decoding="async"
+        className="absolute inset-0 block w-full h-full object-cover object-center"
+      />
+
+      <div
+        className="absolute inset-0 bg-black/30"
+        aria-hidden="true"
+      />
     </section>
   );
 }
