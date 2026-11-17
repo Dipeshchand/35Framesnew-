@@ -51,7 +51,7 @@ export default function IntroPage() {
               >
                 <div className="text-center">
                   <h1 className="text-3xl md:text-5xl font-baskervville mb-4" style={{fontFamily:"Seasons"}}>
-                    Vowframe hy
+                    Vowframe
                   </h1>  
                   <button 
                     onClick={() => navigate("/home")}
